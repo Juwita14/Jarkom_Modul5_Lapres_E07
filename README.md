@@ -41,3 +41,110 @@ xterm -T GRESIK -e linux ubd0=GRESIK,jarkom umid=GRESIK eth0=daemon,,,switch4 me
 Untuk router **SURABAYA**, **BATU**, dan **KEDIRI** di-uncomment dengan perintah ```net.ipv4.ip_forward=1``` . Dengan cara mengetikkan ```nano /etc/sysctl.conf``` kemudian melakukan edit, dan mengetikkan ```sysctl -p```.
 
 Kemudian melakukan setting pada file ```/etc/network/interfaces``` pada setiap UML masing-masing sebagai berikut:
+**SURABAYA (Sebagai Router)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.151.70.34
+netmask 255.255.255.252
+gateway 10.151.70.33
+
+auto eth1
+iface eth1 inet static
+address 192.168.0.1
+netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+address 192.168.0.5
+netmask 255.255.255.252
+```
+**KEDIRI (Sebagai Router dan DHCP Relay)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.0.2
+netmask 255.255.255.252
+gateway 192.168.0.1
+
+auto eth1
+iface eth1 inet static
+address 192.168.0.9
+netmask 255.255.255.248
+
+auto eth2
+iface eth2 inet static
+address 192.168.1.1
+netmask 255.255.255.0
+```
+**BATU (Sebagai Router dan DHCP Relay)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.0.6
+netmask 255.255.255.252
+gateway 192.168.0.5
+
+auto eth1
+iface eth1 inet static
+address 10.151.71.65
+netmask 255.255.255.248
+
+auto eth2
+iface eth2 inet static
+address 192.168.2.1
+netmask 255.255.255.0
+```
+**MALANG (Sebagai DNS Server)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.151.71.66
+netmask 255.255.255.248
+gateway 10.151.71.65
+```
+**MOJOKERTO (Sebagai DHCP Server)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.151.71.67
+netmask 255.255.255.248
+gateway 10.151.71.65
+```
+**MADIUN (Sebagai Web Server)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.0.10
+netmask 255.255.255.248
+gateway 192.168.0.9
+```
+**PROBOLINGGO (Sebagai Web Server)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.0.11
+netmask 255.255.255.248
+gateway 192.168.0.9
+```
