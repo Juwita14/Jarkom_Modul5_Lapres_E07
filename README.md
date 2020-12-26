@@ -148,3 +148,4 @@ address 192.168.0.11
 netmask 255.255.255.248
 gateway 192.168.0.9
 ```
+Kemudian melakukan restart networking-nya dengan perintah ```service networking restart```.
