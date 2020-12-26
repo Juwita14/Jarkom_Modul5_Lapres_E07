@@ -36,7 +36,7 @@ xterm -T GRESIK -e linux ubd0=GRESIK,jarkom umid=GRESIK eth0=daemon,,,switch4 me
 ### B. Subnetting VSLM
 ![vslm](https://user-images.githubusercontent.com/56763570/103144518-6b7df400-46df-11eb-9a2f-864e6e98da19.jpg)
 
-![modul4-modul 5](https://user-images.githubusercontent.com/56763570/103144644-f06a0d00-46e1-11eb-9f0e-a0189817e423.png)
+![modul4-modul 5 (2)](https://user-images.githubusercontent.com/56763570/103144673-55256780-46e2-11eb-93a9-91fecd0c1e24.png)
 
 Untuk router **SURABAYA**, **BATU**, dan **KEDIRI** di-uncomment dengan perintah ```net.ipv4.ip_forward=1``` . Dengan cara mengetikkan ```nano /etc/sysctl.conf``` kemudian melakukan edit, dan mengetikkan ```sysctl -p```.
 
