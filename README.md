@@ -172,7 +172,7 @@ gateway 192.168.2.1
 ```
 Kemudian melakukan restart networking-nya dengan perintah ```service networking restart```.
 
-## C. Routing
+### C. Routing
 Berikut routing berdasarkan perhitungan degan VLSM
 ```
 ip route add 192.168.1.0/24 via 192.168.0.2
@@ -182,7 +182,7 @@ ip route add 10.151.71.64/29 via 192.168.0.6
 ```
 Disimpan pada file bash misalkan dengan nama **route.sh** kemudian untuk menjalankannya dengan perintah ```source route.sh```.
 
-## D. DHCP Server-Relay (IP GRESIK & SIDOARJO)
+### D. DHCP Server-Relay (IP GRESIK & SIDOARJO)
 Pada **MOJOKERTO** menjadi DHCP Server dengan meng-instal  ```apt-get install isc-dhcp-server```, sedangkan **KEDIRI** dan **BATU** yang akan menjadi DHCP Relay, perlu diinstallkan dengan perintah ```apt-get install isc-dhcp-relay```.
 
 Sedangkan untuk klien **GRESIK** dan **SIDOARJO** akan diedit yng awalnya static menjadi dhcp pada file ```/etc/network/interfaces``` menjadi sebagai berikut:
@@ -197,9 +197,37 @@ Kemudian pada **MOJOKERTO** (DHCP Server), diedit pada file ```/etc/default/isc-
 
 Kemudian diedit juga pada file ```/etc/dhcp/dhcpd.conf``` sebagai berikut:
 
-
+DISINI PUY
 
 
 
 
 Kemudian melakukan perintah pada klien **GRESIK** dan **SIDOARJO**, ```service networking restart```. Dapat dicek dengan perintah ```ifconfig```.
+
+### 1. SURABAYA Dapat Mengakses Keluar Tanpa MASQUERADE
+Perintah iptables di **SURABAYA** sebagai berikut.
+```
+iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o eth0 -j SNAT --to-source 10.151.70.46
+```
+### 2. Akses SSH di luar topologi akan di-DROP ketika mengakses server yang memiliki IP DMZ (lakukan setting di SURABAYA)
+Perintah iptables di **SURABAYA** sebagai berikut.
+```
+iptables -A FORWARD -d 10.151.71.88/29 -i eth0 -p tcp --dport 22 -j DROP
+```
+### 3. DHCP Server dan DNS Server maksimal menerima 3 koneksi ICMP secara bersamaan, selebihnya di-DROP 
+Ditambahkan perintah iptables sebagai berikut di **MALANG (DNS Server)** dan **MOJOKERTO (DHCP Server)**.
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP 
+```
+### 4 SIDOARJO diberikan waktu akses untuk mengakses server MALANG:
+**SIDOARJO = 07:00 - 17:00 (Senin - Jumat)**
+Ditambahkan perintah iptables sebagai berikut di **MALANG**:
+```
+iptables -A INPUT -s 192.168.2.0/24 -m time --timestart 07:00 --timestop 17:00 --days Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -s 192.168.2.0/24 -j REJECT
+```
+### 5 GRESIK diberikan waktu akses untuk mengakses server MALANG:
+**GRESIK = 17:00 - 07:00 (Setiap Hari)**
+```
+iptables -A INPUT -s 192.168.1.0/24 -m time --timestart 07:00 --timestop 17:00 -j REJECT
+```
