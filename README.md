@@ -38,3 +38,6 @@ xterm -T GRESIK -e linux ubd0=GRESIK,jarkom umid=GRESIK eth0=daemon,,,switch4 me
 
 ![VLSM](https://user-images.githubusercontent.com/56763570/103144523-78024c80-46df-11eb-80ff-d1fd686b1e42.jpg)
 
+Untuk router **SURABAYA**, **BATU**, dan **KEDIRI** di-uncomment dengan perintah ```net.ipv4.ip_forward=1``` . Dengan cara mengetikkan ```nano /etc/sysctl.conf``` kemudian melakukan edit, dan mengetikkan ```sysctl -p```.
+
+Kemudian melakukan setting pada file ```/etc/network/interfaces``` pada setiap UML masing-masing sebagai berikut:
