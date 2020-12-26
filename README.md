@@ -221,6 +221,7 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j
 ```
 ### 4 SIDOARJO diberikan waktu akses untuk mengakses server MALANG:
 **SIDOARJO = 07:00 - 17:00 (Senin - Jumat)**
+
 Ditambahkan perintah iptables sebagai berikut di **MALANG**:
 ```
 iptables -A INPUT -s 192.168.2.0/24 -m time --timestart 07:00 --timestop 17:00 --days Mon,Tue,Wed,Thu,Fri -j ACCEPT
@@ -228,6 +229,8 @@ iptables -A INPUT -s 192.168.2.0/24 -j REJECT
 ```
 ### 5 GRESIK diberikan waktu akses untuk mengakses server MALANG:
 **GRESIK = 17:00 - 07:00 (Setiap Hari)**
+
+Ditambahkan perintah iptables sebagai berikut di **MALANG**:
 ```
 iptables -A INPUT -s 192.168.1.0/24 -m time --timestart 07:00 --timestop 17:00 -j REJECT
 ```
