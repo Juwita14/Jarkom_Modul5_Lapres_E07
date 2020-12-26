@@ -196,3 +196,10 @@ iface eth0 inet dhcp
 Kemudian pada **MOJOKERTO** (DHCP Server), diedit pada file ```/etc/default/isc-dhcp-server```, ditambahkan interface ```eth0``` untuk INTERFACESv4.
 
 Kemudian diedit juga pada file ```/etc/dhcp/dhcpd.conf``` sebagai berikut:
+
+
+
+
+
+
+Kemudian melakukan perintah pada klien **GRESIK** dan **SIDOARJO**, ```service networking restart```. Dapat dicek dengan perintah ```ifconfig```.
