@@ -148,6 +148,28 @@ address 192.168.0.11
 netmask 255.255.255.248
 gateway 192.168.0.9
 ```
+**GRESIK (Sebagai Client)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.1.2
+netmask 255.255.255.0
+gateway 192.168.1.1
+```
+**SIDOARJO (Sebagai Client)**
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.2.2
+netmask 255.255.255.0
+gateway 192.168.2.1
+```
 Kemudian melakukan restart networking-nya dengan perintah ```service networking restart```.
 
 ## C. Routing
@@ -158,5 +180,16 @@ ip route add 192.168.2.0/24 via 192.168.0.6
 ip route add 192.168.0.8/29 via 192.168.0.2
 ip route add 10.151.71.64/29 via 192.168.0.6
 ```
-
 Disimpan pada file bash misalkan dengan nama **route.sh** kemudian untuk menjalankannya dengan perintah ```source route.sh```.
+
+## D. DHCP Server-Relay (IP GRESIK & SIDOARJO)
+Pada **MOJOKERTO** menjadi DHCP Server dengan meng-instal  ```apt-get install isc-dhcp-server```, sedangkan **KEDIRI** dan **BATU** yang akan menjadi DHCP Relay, perlu diinstallkan dengan perintah ```apt-get install isc-dhcp-relay```.
+
+Sedangkan untuk klien **GRESIK** dan **SIDOARJO** akan diedit yng awalnya static menjadi dhcp pada file ```/etc/network/interfaces``` menjadi sebagai berikut:
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+```
