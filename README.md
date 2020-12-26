@@ -33,3 +33,8 @@ xterm -T PROBOLINGGO -e linux ubd0=PROBOLINGGO,jarkom umid=PROBOLINGGO eth0=daem
 xterm -T SIDOARJO -e linux ubd0=SIDOARJO,jarkom umid=SIDOARJO eth0=daemon,,,switch5 mem=96M &
 xterm -T GRESIK -e linux ubd0=GRESIK,jarkom umid=GRESIK eth0=daemon,,,switch4 mem=96M &
 ```
+### B. Subnetting VSLM
+![vslm](https://user-images.githubusercontent.com/56763570/103144518-6b7df400-46df-11eb-9a2f-864e6e98da19.jpg)
+
+![VLSM](https://user-images.githubusercontent.com/56763570/103144523-78024c80-46df-11eb-80ff-d1fd686b1e42.jpg)
+
