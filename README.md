@@ -149,3 +149,14 @@ netmask 255.255.255.248
 gateway 192.168.0.9
 ```
 Kemudian melakukan restart networking-nya dengan perintah ```service networking restart```.
+
+## C. Routing
+Berikut routing berdasarkan perhitungan degan VLSM
+```
+ip route add 192.168.1.0/24 via 192.168.0.2
+ip route add 192.168.2.0/24 via 192.168.0.6
+ip route add 192.168.0.8/29 via 192.168.0.2
+ip route add 10.151.71.64/29 via 192.168.0.6
+```
+
+Disimpan pada file bash misalkan dengan nama **route.sh** kemudian untuk menjalankannya dengan perintah ```source route.sh```.
