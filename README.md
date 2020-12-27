@@ -207,7 +207,7 @@ Kemudian melakukan perintah pada klien **GRESIK** dan **SIDOARJO**, ```service n
 ### 1. SURABAYA Dapat Mengakses Keluar Tanpa MASQUERADE
 Perintah iptables di **SURABAYA** sebagai berikut.
 ```
-iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o eth0 -j SNAT --to-source 10.151.70.46
+iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o eth0 -j SNAT --to-source 10.151.70.34
 ```
 ### 2. Akses SSH di luar topologi akan di-DROP ketika mengakses server yang memiliki IP DMZ (lakukan setting di SURABAYA)
 Perintah iptables di **SURABAYA** sebagai berikut.
