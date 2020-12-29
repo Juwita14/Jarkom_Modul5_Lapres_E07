@@ -173,7 +173,7 @@ gateway 192.168.2.1
 Kemudian melakukan restart networking-nya dengan perintah ```service networking restart```.
 
 ### C. Routing
-Berikut routing berdasarkan perhitungan degan VLSM
+Berikut routing berdasarkan perhitungan degan VLSM yang dijalankan di UML SURABAYA
 ```
 ip route add 192.168.1.0/24 via 192.168.0.2
 ip route add 192.168.2.0/24 via 192.168.0.6
@@ -197,12 +197,31 @@ Kemudian pada **MOJOKERTO** (DHCP Server), diedit pada file ```/etc/default/isc-
 
 Kemudian diedit juga pada file ```/etc/dhcp/dhcpd.conf``` sebagai berikut:
 
-DISINI PUY
-
-
-
-
-Kemudian melakukan perintah pada klien **GRESIK** dan **SIDOARJO**, ```service networking restart```. Dapat dicek dengan perintah ```ifconfig```.
+```
+subnet 10.151.71.64 netmask 255.255.255.248 {  
+  option routers 10.151.71.65;
+	option broadcast-address 10.151.71.71;
+}
+subnet 192.168.1.0 netmask 255.255.255.0 {
+	range 192.168.1.2 192.168.1.213;
+	option routers 192.168.1.1;
+	option broadcast-address 192.168.1.255;
+	option domain-name-servers 10.151.71.66; #malang
+	option domain-name-servers 202.46.129.2;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+subnet 192.168.2.0 netmask 255.255.255.0 {
+	range 192.168.2.2 192.168.2.203;
+	option routers 192.168.2.1;
+	option broadcast-address 192.168.2.255;
+	option domain-name-servers 10.151.71.66; #malang
+	option domain-name-servers 202.46.129.2;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+```
+kemudian lakukan restart dengan ```service isc-dhcp-server restart``` untuk server (**MOJOKERTO**) dan ```service isc-dhcp-relay restart``` (**KEDIRI** dan **BATU**). selain itu lakukan perintah pada klien **GRESIK** dan **SIDOARJO**, ```service networking restart```. Dapat dicek dengan perintah ```ip a```.
 
 ### 1. SURABAYA Dapat Mengakses Keluar Tanpa MASQUERADE
 Perintah iptables di **SURABAYA** sebagai berikut.
@@ -233,4 +252,27 @@ iptables -A INPUT -s 192.168.2.0/24 -j REJECT
 Ditambahkan perintah iptables sebagai berikut di **MALANG**:
 ```
 iptables -A INPUT -s 192.168.1.0/24 -m time --timestart 07:00 --timestop 17:00 -j REJECT
+```
+### 6 SURABAYA disetting sehingga setiap request dari client yang mengakses DNS Server akan didistribusikan secara bergantian pada PROBOLINGGO port 80 dan MADIUN port 80
+Ditambahkan perintah iptables sebagai berikut di **SURABAYA**:
+```
+iptables -A PREROUTING -t nat -d 10.151.71.66 -p tcp --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.168.0.10:80
+iptables -A PREROUTING -t nat -d 10.151.71.66 -p tcp --dport 80 -j DNAT --to-destination 192.168.0.11:80
+```
+
+### 7 semua paket didrop oleh firewall (dalam topologi) tercatat dalam log pada setiap UML yang memiliki aturan drop
+Ditambahkan perintah iptables sebagai berikut di **SURABAYA**:
+```
+iptables -N LOGGING 
+iptables -A FORWARD -j LOGGING 
+iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IP Tables Packet Dropped: " --log-level 4 
+iptables -A LOGGING -j DROP
+```
+Ditambahkan perintah iptables sebagai berikut di **MALANG** dan **MOJOKERTO**:
+```
+iptables -N LOGGING
+iptables -A INPUT -j LOGGING
+iptables -A OUTPUT -j LOGGING
+iptables -A LOGGING -j LOG --log-prefix "IP Tables Packet Dropped: " --log-level 4
+iptables -A LOGGING -j DROP
 ```
