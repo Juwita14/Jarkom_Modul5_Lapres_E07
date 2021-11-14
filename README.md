@@ -276,3 +276,5 @@ iptables -A OUTPUT -j LOGGING
 iptables -A LOGGING -j LOG --log-prefix "IP Tables Packet Dropped: " --log-level 4
 iptables -A LOGGING -j DROP
 ```
+
+ini file lama
